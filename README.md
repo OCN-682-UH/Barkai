@@ -9,6 +9,6 @@
 
 **Folders:**
 
-- [**Week_02**](http://github.com/OCN-682-UH/Barkai/blob/main/Week_02): Reproducible scripts and workflow/importing data
+- [**Week_02**](http://github.com/OCN-682-UH/Barkai/tree/main/Week_02): Reproducible scripts and workflow/importing data
   - [Data](http://github.com/OCN-682-UH/Barkai/blob/main/Week_02/Data)
   - [Scripts](http://github.com/OCN-682-UH/Barkai/blob/main/Week_02/Scripts) 
