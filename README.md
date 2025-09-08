@@ -7,8 +7,6 @@
       * Scripts
       * Output
 
-**Author:** Leah Barkai
-
 **Folders:**
 
 - [**Week_02**](http://github.com/OCN-682-UH/Barkai/blob/main/Week_02): Reproducible scripts and workflow/importing data
