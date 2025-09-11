@@ -6,6 +6,8 @@
 install.packages("palmerpenguins")
 library(palmerpenguins)
 library(tidyverse)
+
+### Load data #####
 glimpse(penguins)
 
 ### Data Analysis Code - ggplot #####
