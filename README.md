@@ -16,5 +16,5 @@
   * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_03/Output): Pengiun graph - This is the graph I made of the palmer penguins data
   * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_03/Scripts):
       * Week_03_Script of Own Graph - This is a script to make my own visualization of the palmer penguins data
-      * UH/Barkai/tree/main/Week_03/Scripts): Week_03_Script_Palmer Penguins - This is the script to palmer penguins data we did in class
-      * UH/Barkai/tree/main/Week_03/Scripts): Week_03_video_of_penguindata - This is the script to palmer penguins data from the lecture video
+      * Week_03_Script_Palmer Penguins - This is the script to palmer penguins data we did in class
+      * Week_03_video_of_penguindata - This is the script to palmer penguins data from the lecture video
