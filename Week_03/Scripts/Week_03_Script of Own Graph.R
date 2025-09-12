@@ -14,13 +14,6 @@ library(here)
 ### Load data #####
 glimpse(penguins)
 
-
-what they suggested 
-ggplot(penguins, aes(x = bill_length_mm, fill = species)) +
-  geom_histogram(binwidth = 2, alpha = 0.7, position = "identity")
-
-
-
 ### Data Analysis Code - ggplot #####
 Pengiun_plot<-ggplot(data=penguins, ##this is the data I am using
        mapping = aes(x = bill_length_mm,    #mapping reminder is stuff in the data #x axis is the bill length 
