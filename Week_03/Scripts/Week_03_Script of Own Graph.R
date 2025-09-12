@@ -37,6 +37,7 @@ Pengiun_plot<-ggplot(data=penguins, ##this is the data I am using
     plot.title = element_text(size = 18, face = "bold") #size of the title
   )   
 
-ggsave(here("Week_03", "Output", "Pengiun graph.png")) #saving it
+ggsave(here("Week_03", "Output", "Pengiun graph.png"), 
+       width = 7, height = 5) #saving it with certain dimensions 
 
 Pengiun_plot #testing it out
