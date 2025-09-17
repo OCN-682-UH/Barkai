@@ -19,7 +19,7 @@
       * Week_03_Script_Palmer Penguins - This is the script to palmer penguins data we did in class
       * Week_03_video_of_penguindata - This is the script to palmer penguins data from the lecture video
 *  [**Week_04**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04): Tidyr and Dplyr
-  * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Output): Distribution_of_Log_Body_Mass_for_Female_Penguins - This is the graph I made of the female penguin data
-  * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Scripts):
+   * Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Output): Distribution_of_Log_Body_Mass_for_Female_Penguins - This is the graph I made of the female penguin data
+   * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Scripts):
       * Week 4 in class - This is the script I wrote during class
       * Homework_Part_1 - This is a script for homework part 1
