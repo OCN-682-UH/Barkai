@@ -19,6 +19,9 @@
       * Week_03_Script_Palmer Penguins - This is the script to palmer penguins data we did in class
       * Week_03_video_of_penguindata - This is the script to palmer penguins data from the lecture video
 *  [**Week_04**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04): Data Wrangling
+   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Data):
+        * chem_data_dictionary.csv - This is the data dictionary that was given to me
+        * chemicaldata_maunalua.csv - This is the data given to me
    * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Output):
         * ChemData_Salinity_summary.csv - Table I made for HW pt 2
         * HW_pt1_Distribution_of_Log_Body_Mass_for_Female_Penguins - This is the graph I made of the female penguin data
