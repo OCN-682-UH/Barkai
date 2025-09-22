@@ -19,7 +19,12 @@
       * Week_03_Script_Palmer Penguins - This is the script to palmer penguins data we did in class
       * Week_03_video_of_penguindata - This is the script to palmer penguins data from the lecture video
 *  [**Week_04**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04): Data Wrangling
-   * Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Output): Distribution_of_Log_Body_Mass_for_Female_Penguins - This is the graph I made of the female penguin data
+   * Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Output):
+        * ChemData_Salinity_summary.csv - Table I made for HW pt 2
+        * HW_pt1_Distribution_of_Log_Body_Mass_for_Female_Penguins - This is the graph I made of the female penguin data
+        * HW_pt2_Salinity_Plot.png: Plot I made for HW pt 2
    * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Scripts):
-      * Week 4 in class - This is the script I wrote during class
-      * Homework_Part_1 - This is a script for homework part 1
+      * Homework_Part_1.R - This is the script for HW part 1
+      * Homework_Part_2.R - This is the script for HW part 2
+      * Week_4_in_class - This is the script I wrote during class
+      * Video_Script.R - This is the script I made while watching the homework video
