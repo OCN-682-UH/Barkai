@@ -29,11 +29,14 @@ ChemData_Salinity_summary <- ChemData_Clean %>% #adding another name
   summarize(mean_salinity = mean(Salinity, na.rm = TRUE)) %>% #doing the mean salinity of each group
   write_csv(here("Week_04","Output","ChemData_Salinity_summary.csv"))  # export as a csv to the right folder
 
-Salinity_labels <- ChemData_Salinity_summary %>% #adding another name
+Salinity_summary <- ChemData_Salinity_summary %>% #adding another name
   group_by(Zone) %>% #each zone has its own line in the plot to group each zone seapartely not together
   slice_max(Waypoint)  # picks the row with the largest Waypoint for each Zone so we can label on that part
 
-view(Salinity_labels)
+view(Salinity_summary)
+
+#Export salinity summary
+write_csv(Salinity_summary, here("Week_04", "Output", "Salinity_summary_table"))
 
 # Plot
 p<-ggplot(ChemData_Salinity_summary, #naming the plot p
