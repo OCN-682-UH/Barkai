@@ -26,6 +26,7 @@
         * ChemData_Salinity_summary.csv - Table I made for HW pt 2
         * HW_pt1_Distribution_of_Log_Body_Mass_for_Female_Penguins - This is the graph I made of the female penguin data
         * HW_pt2_Salinity_Plot.png: Plot I made for HW pt 2
+        * Salinity_summary_table: Summary table of salinity for plot
    * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_04/Scripts):
       * Homework_Part_1.R - This is the script for HW part 1
       * Homework_Part_2.R - This is the script for HW part 2
