@@ -32,17 +32,17 @@
       * Homework_Part_2.R - This is the script for HW part 2
       * Week_4_in_class - This is the script I wrote during class
       * Video_Script.R - This is the script I made while watching the homework video
-   * [**Week_05**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_05): Joins
-      * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_05/Data):
-        * CondData.csv - This is the Conductivity data given to me
-        * DepthData.csv - This is the depth data given to me
-        * Topt_data.csv - This is the data given to me
-        * data_dictionary.csv - This is the data dictionary given to me
-        * site.characteristics.data.csv - This is the data given to me
-      *  [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_05/Output):
-         * Salinity_Temperature_Plot.png - Table I made for HW
-      * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_05/Script):
-         * Week_05_Challenge.R - This is the script for challenge given
-         * Week_05_script_videopractice.R - This is the script for me following the video
-         * Week_5_HW.R - This is the script I wrote for the homework
-         * Week_5_inclass.R - This is the script I wrote during class
+* [**Week_05**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_05): Joins
+  * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_05/Data):
+    * CondData.csv - This is the Conductivity data given to me
+      * DepthData.csv - This is the depth data given to me
+      * Topt_data.csv - This is the data given to me
+      * data_dictionary.csv - This is the data dictionary given to me
+      * site.characteristics.data.csv - This is the data given to me
+    *  [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_05/Output):
+      * Salinity_Temperature_Plot.png - Table I made for HW
+   * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_05/Script):
+     * Week_05_Challenge.R - This is the script for challenge given
+      * Week_05_script_videopractice.R - This is the script for me following the video
+      * Week_5_HW.R - This is the script I wrote for the homework
+      * Week_5_inclass.R - This is the script I wrote during class
