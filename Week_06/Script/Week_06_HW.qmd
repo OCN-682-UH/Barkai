@@ -1,0 +1,127 @@
+---
+title: "Week 6 Homework"
+author: "Leah Barkai"
+date: today
+format: pdf
+editor: visual
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    fig.path: "../Output/" ## added the ../ because your qmd folder is in your scripts folder so we need to go up one directory and then into your output folder
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+# Introduction
+
+Today I am going to do my homework with the [DepthData]{.underline} from Week 5.
+
+DepthData has:
+
+-   Date (YYYY-MM-DD HH:MM:SS)
+
+-   Atmospheric Pressure (dbar)
+
+-   Depth (meters)
+
+# Load Libraries
+
+These are the libraries I needed for this homework assignment.
+
+```{r}
+library(tidyverse) #loads a bunch of data-science packages
+library(here) #helps to call in data
+library(knitr) #lets you run code chunks in Quarto and R Markdown
+library(kableExtra) #For kbl() and kable_styling()
+```
+
+# Read in data
+
+I used the data from Week 5, but I put the data in my *Week 6* folder too. Dr. Nyssa Silbiger from UHM collected this data.
+
+```{r}
+Depthdata<-read_csv(here("Week_06","Data","DepthData.csv")) #adding the data in
+```
+
+# Look at the data
+
+This was to get an idea of the format of the data.
+
+```{r}
+glimpse(Depthdata) #look at the structure, types and first few rows of the data table
+```
+
+# Organizing the Data for Data Analysis
+
+For this data, I will summarize the data by minute so there isn't so many data points then make a table and plot with that.
+
+## Rename columns
+
+I wanted to rename the columns of the data set for my table below.
+
+```{r}
+RenameDepthdata <- Depthdata %>%
+  rename("Date (YYYY-MM-DD HH:MM:SS)" = date, #renaming the date column to have the date layout
+         "Atmospheric Pressure (dbar)" = AbsPressure, #writing out the name and adding units
+         "Depth (m)" = Depth) #adding units
+```
+
+## Summarize the Data by Minute
+
+Here I rounded the times to the nearest minute and took the mean there so there wasn't so many data points.
+
+```{r}
+Pressure_summary <- RenameDepthdata %>% #renaming it
+  mutate(`Date (YYYY-MM-DD HH:MM:SS)` = ymd_hms(`Date (YYYY-MM-DD HH:MM:SS)`)) %>% # Change character to date and time
+  mutate(`Date (YYYY-MM-DD HH:MM:SS)` = floor_date(`Date (YYYY-MM-DD HH:MM:SS)`, "minute")) %>% # Round the time down to the nearest minute
+  group_by(`Date (YYYY-MM-DD HH:MM:SS)`) %>% # Group the data by each rounded mintue
+  summarise( # Calculate mean values per minute
+    `Atmospheric Pressure (dbar)` = mean(`Atmospheric Pressure (dbar)`),
+    `Depth (m)` = mean(`Depth (m)`)
+  )
+```
+
+# Data Analysis
+
+## Data Table
+
+Here is how I showed you the data in a table so I didn't have to rewrite each data measurement.
+
+```{r}
+#| label: tbl-all-data
+#| tbl-cap: All Depth Data
+
+Pressure_summary  %>%
+  kbl() %>% #making a kable table
+  kable_styling(full_width = FALSE) #making the table not take the full width of the page
+  
+```
+
+## Plot
+
+This is the code for looking at the relationship between **Atmospheric Pressure** and **Depth** over time to make a plot.
+
+```{r}
+#| out-width: "90%"
+#| fig-align: "center"
+#| label: Pressure-Plot #So I can reference this in the text
+#| fig-cap: "This is a plot of Atmospheric Pressure and Depth over time"
+
+Pressure_long <- Pressure_summary %>%
+  pivot_longer( # Convert to long data 
+    cols = c(`Atmospheric Pressure (dbar)`, `Depth (m)`), #Columns to change
+    names_to = "Variable", #New column name
+    values_to = "Value"#New column name
+  )
+
+ggplot(Pressure_long, aes(x = `Date (YYYY-MM-DD HH:MM:SS)`, y = Value, color = Variable)) + 
+  geom_line() + #Plot lines with connecting points
+  facet_grid(rows = vars(Variable), scales = "free_y", switch = "y",
+             labeller = labeller(Variable = label_wrap_gen(width = 15))) + # Separate graph for each variable
+  labs(x = "Date", y = NULL, title = "Pressure and Depth Over Time") +  # Remove y-axis label for the whole thing cause it is on top of the graph
+  theme(
+    strip.placement = "outside", #puts the x-axis label outside
+    legend.position = "none",  # Remove the legend
+    plot.margin = margin(10, 30, 10, 10)) #making sure I can see the whole plot
+```
+
+[**Summary:**]{.underline} \@Pressure-Plot shows that as Depth increases, Atmospheric Pressure generally follows a similar pattern over time.

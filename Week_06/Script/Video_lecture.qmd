@@ -1,0 +1,71 @@
+---
+title: "My quarto part 2"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    df-print: kable
+knitr:
+  opts_chunk:
+    fig.path: "../Output/" ## added the ../ because your qmd folder is in your scripts folder so we need to go up one directory and then into your output folder
+---
+### Introduction 
+Today I am going to plot some penguin data and learn how to work with figures. 
+```{r}
+#|message: false
+#|warning: false
+
+library(kableExtra)
+library(tidyverse)
+library(here)
+library(palmerpenguins)
+library(knitr)
+
+```
+## Look at the data 
+```{r}
+glimpse(penguins)
+```
+## Make a plot 
+This is looking at the relationship between **bill length** and **bill depth**
+```{r}
+#| warning: false 
+#| out-width: "70%"
+#| fig-align: "center"
+#| label: fig-penguin
+#| fig-cap: "This is a figure showing bill length by bill depth"
+
+penguins %>% 
+  ggplot(aes(x=bill_length_mm, y=bill_depth_mm, color = species))+
+  geom_point()
+```
+When you look at @fig-penguin we can see a positive relationship between bill length and bill depth
+
+## Table
+
+| Time  | Session | Topic    |
+|:------|:-------:|---------:|
+| _left_ | _center_ | _right_ |
+| 01:00  | 1       | Anatomy |
+| 01:50  |         | *Break* |
+| 02:00  | 2       | Tables  |
+| 02:45  |         | *Break* |
+
+#Average bill length by species 
+```{r}
+#| warning: false
+#| message: false
+#| label: tbl-penguin
+#| tbl-cap: This is my penguin table
+
+penguins %>%
+  group_by(species) %>%
+  summarise(billmean = mean(bill_length_mm, na.rm = TRUE)) %>%
+  kbl() %>%# make it a kable table
+  kable_classic() %>% # add a theme that adds different colors 
+  row_spec(2, bold = TRUE, color = "white", background = "red") %>% # highlight row 2 to have things stand out 
+  kable_styling(full_width = FALSE) # don't make it so wide
+
+```
+
+Table @tbl-penguin has info on the mean bill length by species

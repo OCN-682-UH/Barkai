@@ -50,7 +50,7 @@ ggplot(longData, aes(x = date, y = value, color = variable)) +
       labs(
     title = "Salinity and Temperature Over Time", # Title
     x = "Time", # X axis label
-    y = "Value", # Y axis label
+    y = "Value (Temp = °C Salinity = PSU)", # Y axis label
     color = "Variable" # legend title
   ) +
   theme_minimal() + # use a clean minimal theme for readability
