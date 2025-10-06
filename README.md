@@ -48,7 +48,7 @@
       * Week_5_inclass.R - This is the script I wrote during class
 * [**Week_06**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_06): Quarto
   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_06/Data):
-   * DepthData.csv - This is the depth data given to me from week 5
+      * DepthData.csv - This is the depth data given to me from week 5
   * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_06/Output):
       * Pressure-Plot-1.pdf - Plot I made for HW
       * Week_06_HW.pdf - Here is my PDF of my Quarto for the homeowork
