@@ -1,0 +1,121 @@
+---
+title: "Week 7 Homework"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    theme: cosmo
+    self-contained: true
+    toc: true
+    toc-depth: 2
+    code-fold: true
+editor: visual
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    fig.path: "../Output/" ## added the ../ because my qmd folder is in my scripts folder so need to go up one directory and then into my output folder
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+## Introduction
+
+This document is for my homework for week 7. I decided to use the *Cats on the move!* dataset from a past Tidy Tuesdays. This dataset is from January 31, 2023 and is available [here](https://github.com/rfordatascience/tidytuesday/tree/main/data/2023/2023-01-31). The dataset includes:
+
+-   tag_id – unique identifier for each cat
+
+-   location_long – longitude of the cat’s location
+
+-   location_lat – latitude of the cat’s location
+
+## Load Libraries
+
+These are the libraries I needed for this homework assignment.
+
+```{r}
+library(ggmap) # for Google Maps and plotting spatial data
+library(tidyverse) #loads a bunch of data-science packages
+library(ggspatial) # adds scale bars, north arrows, and spatial annotations
+library(knitr) #lets you run code chunks in Quarto and R Markdown
+library(tidytuesdayR) #to directly download Tidytuesday datasets
+library(here) #to save my plot
+```
+
+## Read in data
+
+This data is from Cats on the move! dataset from a past Tidy Tuesdays. This dataset is from 1-31-2023. Between 2013 and 2017, Roland Kays et al. convinced hundreds of volunteers in the U.S., U.K., Australia, and New Zealand to strap GPS sensors on their pet cats. The aforelinked datasets include each cat's characteristics (such as age, sex, neuter status, hunting habits) and time-stamped GPS pings. I will be using the data only from the U.K..
+
+Citations for this data:
+
+-   Kays R, Dunn RR, Parsons AW, Mcdonald B, Perkins T, Powers S, Shell L, McDonald JL, Cole H, Kikillus H, Woods L, Tindle H, Roetman P (2020) The small home ranges and large local ecological impacts of pet cats. Animal Conservation. [doi:10.1111/acv.12563](http://dx.doi.org/10.1111/acv.12563)
+
+-   McDonald JL, Cole H (2020) Data from: The small home ranges and large local ecological impacts of pet cats \[United Kingdom\]. Movebank Data Repository. [doi:10.5441/001/1.pf315732](http://dx.doi.org/10.5441/001/1.pf315732)
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load('2023-01-31') #Load in the data by date
+
+cats_uk <- tuesdata$cats_uk #GPS tracking data for UK cats
+cats_uk_reference <- tuesdata$cats_uk_reference #Reference info about the cats
+```
+
+## Data Dictionary
+
+Full dictionaries are available on [Movebank](https://www.datarepository.movebank.org/handle/10255/move.882)
+
+## Look at the data
+
+This was to get an idea of what was in the data.
+
+```{r}
+glimpse(cats_uk) #look at the structure, types and first few rows of the data table
+glimpse(cats_uk_reference) #overview of the reference data
+```
+
+## Data Analysis
+
+\*Make sure you inputted your Google Maps API key before
+
+```{r}
+# Determine map boundaries based on min/max cat coordinates
+bbox <- c(
+  left = min(cats_uk$location_long, na.rm = TRUE), # minimum longitude (western edge)
+  bottom = min(cats_uk$location_lat, na.rm = TRUE), # minimum latitude (southern edge)
+  right = max(cats_uk$location_long, na.rm = TRUE), # maximum longitude (eastern edge)
+  top = max(cats_uk$location_lat, na.rm = TRUE) # maximum latitude (northern edge)
+)
+
+#Map centered on the average cat location 
+center_lon <- mean(cats_uk$location_long, na.rm = TRUE) #longitude center
+center_lat <- mean(cats_uk$location_lat, na.rm = TRUE)  #latitude center
+
+catmap <- get_googlemap(
+  center = c(lon = center_lon, lat = center_lat), #center of map
+  zoom = 8, #zoom level
+  maptype = "satellite"
+)
+
+##Map
+my_map <- ggmap(catmap) +
+  geom_point(
+    data = cats_uk,#Use cats_uk dataset
+    aes(x = location_long, y = location_lat), # Longitude for x axis, Latitude for y axis
+    color = "red", alpha = 0.6, size = 2) +  # Red points
+  annotation_scale(bar_cols = c("yellow", "white"), location = "bl") + # Scale bar bottom-left
+  annotation_north_arrow(location = "tl") + #North arrow top-left
+  coord_sf(crs = 4326) + # GPS coordinates
+  labs(
+    title = "Pet Cats Locations in the UK", # Map title
+    subtitle = "Coordinate system: standard GPS", #This is to show what system that was used
+    caption = "Data source: Kays et al. (2020), Movebank Data Repository, via TidyTuesday (2023-01-31)", #Where the data is from
+    x = "Longitude", # X-axis label
+    y = "Latitude" # Y-axis label
+  ) +
+  theme_minimal()
+
+ggsave(here("Week_07","Output","PetCatsLocationsinUK.pdf"), plot = my_map, width = 8, height = 6) #saving my map to the output folder
+
+print(my_map)
+```
+
+[Summary of data:]{.underline}
+
+The map shows all tracked cats in the UK from this dataset. The red points indicate each cat's location that was recorded. There is a scale bar and north arrow on the map so you can understand it. The coordinate system used is standard GPS.

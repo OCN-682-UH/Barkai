@@ -1,0 +1,126 @@
+---
+title: "Week_07_OnlineVideo"
+author: "Leah Barkai"
+date: today
+format: html
+editor: visual
+---
+
+---
+extra stuff I could use:
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    fig.path: "../Output/" ## added the ../ because your qmd folder is in your scripts folder so we need to go up one directory and then into your output folder
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+## Introduction
+
+This document is for all the stuff I did while watching the online video lecture for week 7.
+
+# [DepthData has:]{.underline}
+
+-   [Date (YYYY-MM-DD HH:MM:SS)]{.underline}
+
+-   [Atmospheric Pressure (dbar)]{.underline}
+
+-   [Depth (meters)]{.underline}
+
+# Load Libraries
+
+These are the libraries I needed for this video.
+
+for this homework assignment.
+
+```{r}
+library(ggmap)
+library(tidyverse) #loads a bunch of data-science packages
+library(here) #helps to call in data
+library(readr) #to load in the data
+library(ggspatial)
+
+
+
+----
+library(tidyverse) #loads a bunch of data-science packages
+library(here) #helps to call in data
+library(knitr) #lets you run code chunks in Quarto and R Markdown
+library(kableExtra) #For kbl() and kable_styling()
+library(ggplot2)
+
+
+```
+
+# Read in data
+
+This data is from Maunalua Chemistry data.
+
+```{r}
+ChemData<-read_csv(here("Week_07","Data","chemicaldata_maunalua.csv")) #adding the data in
+```
+
+# Look at the data
+
+This was to get an idea of the format of the data.
+
+```{r}
+glimpse(Chemd) #look at the structure, types and first few rows of the data table
+```
+
+# Data for Data Analysis
+
+```{r}
+Oahu<-get_map("Oahu")
+ggmap(Oahu)
+```
+
+```{r}
+#Make a data frame of lon and lat coordinates
+WP<-data.frame(lon = -157.7621, lat = 21.27427) # coordinates for Wailupe
+# Get base layer
+Map1<-get_map(WP)
+# plot it
+ggmap(Map1)
+
+Map1<-get_map(WP,zoom = 17)
+ggmap(Map1)
+
+Map1<-get_map(WP,zoom = 17, maptype = "satellite")
+ggmap(Map1)
+
+Map1<-get_map(WP,zoom = 17, maptype = "stamen_watercolor", source = "stadia")
+ggmap(Map1)
+
+Map1<-get_map(WP,zoom = 17, maptype = "satellite") 
+ggmap(Map1)+
+  geom_point(data = ChemData,
+             aes(x = Long, y = Lat, color = Salinity),
+             size = 4) +
+  scale_color_viridis_c()
+
+ggmap(Map1)+
+  geom_point(data = ChemData, 
+             aes(x = Long, y = Lat, color = Salinity), 
+             size = 4) + 
+  scale_color_viridis_c()+
+  annotation_scale( bar_cols = c("yellow", "white"),
+                    location = "bl")+ # put the bar on the bottom left and make the colors yellow and white
+  annotation_north_arrow(location = "tl")+ # add a north arrow
+  coord_sf(crs = 4326) # for the scale bar to work it needs to be in this coordinate system - this is a typical coordinate reference system for a GPS (WGS84)
+
+geocode("the white house")
+
+install.packages("emojifont")
+library(emojifont)
+search_emoji('smile')
+## [1] "smiley"      "smile"       "sweat_smile" "smiley_cat"  "smile_cat"
+
+ggplot() + 
+  geom_emoji('smile_cat', 
+             x=1:5, y=1:5, 
+             size=10)
+
+
+
+```
