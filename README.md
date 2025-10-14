@@ -57,3 +57,16 @@
    * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_06/Script):
      * Video_lecture_files - Folder of all script from the video lecture
       * Week_06_HW.qmd - This is the script I created for the homework
+* [**Week_07**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_07): Maps
+  * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_07/Data):
+      * CAPopdata.csv - This is california population data given to me from week 7
+      * chemicaldata_maunalua.cvs - This is data from maunalua bay given to me
+      * stars.cvs - This is stars data given to me
+  * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_07/Output):
+      * CApop.pdf - Map of California population data
+      * PetCatsLocationsinUK.pdf - Here is my PDF of my map of the cats data for my homeowork
+   * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_07/Script):
+     * Week_07_Homework folder - Folder of all script from my homework
+     * Week_07_OnlineVideo.qmd - This is the script I created from the online video
+     * Week_07_Map_In_Class.qmd - This is the script I created from the in class lecture
+
