@@ -1,0 +1,62 @@
+---
+title: "Week 8 In Class Notes"
+format: html
+editor: visual
+---
+
+## Load Libraries
+
+```{r}
+library(here)
+library(tidyverse)
+library(tidytext)
+library(wordcloud2)
+library(janeaustenr)
+```
+
+## Load in Data
+
+```{r}
+1 + 1
+```
+
+## Data Analysis
+
+```{r}
+data<-c("AAA", "TATA", "CTAG", "GCTT")
+# find all the strings with an A
+str_view(data, pattern = "A")
+```
+
+```{r}
+strings<-c("550-153-7578",
+         "banana",
+         "435.114.7586",
+         "home: 672-442-6739")
+
+View(strings)
+
+clean_phones <- strings %>%
+  str_replace_all("\\.", "-") %>% # replace dots with dashes
+  str_replace("\\banana", "")
+  
+View(clean_phones)
+  
+  
+clean_phones <- strings %>%
+  str_replace_all("\\.", "-") %>%        # replace dots with dashes
+  str_replace_all("[a-z]\\:", "") %>%    # remove letter labels like 'home:' or 'cell:'
+  str_trim()                             # remove extra spaces
+
+View(clean_phones)
+  
+  
+  
+  
+  
+  str_extract_all("\\d{3}-\\d{3}-\\d{4}")  # extract sequences like 123-456-7890
+
+print(clean_phones)
+
+View(clean_phones)
+```
