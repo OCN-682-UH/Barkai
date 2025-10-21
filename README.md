@@ -9,6 +9,19 @@
 
 **Folders:**
 
+* [**Good_plot_Bad_plot**](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot): Good plot Bad plot Assignment
+  * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Data):
+     * calendar_photo_leap_year.png - Calendar photo of leap year day
+     * leaper.png - A emoji of someone leaping
+  * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Output):
+      * Badplot.pdf - PDF of Bad plot
+      * Goodplot.pdf - PDF of Good plot
+      * bad_plot-1.png - png of Bad plot
+      * good_plot-1.png - png of Good plot
+  * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Script):
+     * Badplot_goodplot_files/libs - Folder of Badplot_goodplot
+     * Badplot_goodplot.html - HTML of Badplot_goodplot
+     * Badplot_goodplot.qmd - qmd of Badplot_goodplot
 * [**Week_02**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02): Reproducible scripts and workflow/importing data
   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Data): weightdata.csv - this has data on treatments and weight for each sample
   * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Scripts): Week02_script - this is the first script that has loading libraries, read in data and data analysis
@@ -69,4 +82,15 @@
      * Week_07_Homework folder - Folder of all script from my homework
      * Week_07_OnlineVideo.qmd - This is the script I created from the online video
      * Week_07_Map_In_Class.qmd - This is the script I created from the in class lecture
+* [**Week_08**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_08): Working with words
+  * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_08/Output):
+      * mypengiungif.gif - Gif of pengiun data
+      * penguinbounce.gif - Gif of pengiun data bouncing
+      * penguingif.gif - Gif of pengiun
+      * penguinplot.png - Png of pengiun plot
+      * penguintitle.gif - Gif of pengiun title
+   * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_08/Script):
+     * Online Video for Week 8.R - This is the script I created from the online video
+     * Week_08_Inclass_Notes.qmd - This is the script I created from the in class lecture
+
 
