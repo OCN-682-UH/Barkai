@@ -142,7 +142,7 @@ bad_plot <- ggplot(births_count, #Making bad plot first
     #thus making more confusing 
 
 #Saving my plot 
-ggsave(here("Week_08","Output","Badplot.pdf"), plot = bad_plot, width = 8, height = 6) #saving my plot to the output folder
+ggsave(here("Good_plot_Bad_plot","Output","Badplot.pdf"), plot = bad_plot, width = 8, height = 6) #saving my plot to the output folder
 
 print(bad_plot) #viewing plot
 
@@ -208,7 +208,7 @@ good_plot <- ggplot(births_count, aes(x = Birth_year, y = Number_of_births)) + #
   scale_y_continuous(limits = c(1, 9), breaks = 1:9) #Scale for the y axis 
                 # Has enough space for the image at the top
 
-ggsave(here("Week_08","Output","Goodplot.pdf"), plot = good_plot, width = 8, height = 6) #save plot
+ggsave(here("Good_plot_Bad_plot","Output","Goodplot.pdf"), plot = good_plot, width = 8, height = 6) #save plot
 
 print(good_plot)
 ```
