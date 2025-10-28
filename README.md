@@ -93,11 +93,11 @@
      * Online Video for Week 8.R - This is the script I created from the online video
      * Week_08_Inclass_Notes.qmd - This is the script I created from the in class lecture
 * [**Week_09**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_09): Working with factors
- * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_09/Data):
-      *intertidal_data_dictionary.csv - Data dictionary of intertidal data given to me
+   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_09/Data):
+      * intertidal_data_dictionary.csv - Data dictionary of intertidal data given to me
       * intertidaldata.csv - This is data of intertidal data given to me
       * intertidaldata_latitude.csv - This is the latitude data of the intertidal data given to me
-  * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_09/Output):
+   * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_09/Output):
       * mean-algae-plot-1.png - Png of my mean algae plot per site
    * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_09/Script):
      * Week_09_HW.html - This is the html script I created
