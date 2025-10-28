@@ -28,6 +28,7 @@ These are the libraries I needed for this homework assignment.
 library(tidyverse) #loads a bunch of data-science packages
 library(here) #to save my plot
 library(forcats) #use when working with factors
+library(janitor) #Clean up the column headers with this
 ```
 
 ## Read in data
@@ -63,12 +64,18 @@ glimpse(Latitude_Data) #overview of data
 #Merging latitude data with intertidal data 
 algae_data <- Data %>% #Using my dataset called Data and making a new name
   left_join(Latitude_Data, by = "Site") %>% #Use left_join to keep all rows from Data then add laititude data 
-  mutate(Site = fct_reorder(Site, Latitude)) # Reorder the latitude to south → north
+  mutate(Site = fct_reorder(Site, Latitude)) # Reorder the latitude to south → north bc fct_reorder-factor_reorder goes from lowest to highest and this is telling it to do it with the site latitude from lowest to highest
 
 #Making a summary table of mean algae cover per site
 mean_summary <- algae_data %>% #Taking the algae data making new dataset with the means
   group_by(Site) %>% #Groups the data by site to make a summary of it
   summarize(mean_cover = mean(Algae, na.rm = TRUE)) #Finds the mean algae cover per site and ignores the NA values 
+
+#Cleaning up the column headers with stuff learned from working with words lesson
+mean_summary <- mean_summary %>%
+  rename(Mean_Algae_Cover = mean_cover) %>% #Rename mean_cover to Mean_Algae_Cover so you know what it is and be caps too
+  mutate(Site = str_trim(Site),  #Removes spaces on left and right
+         Site=str_to_title(Site)) #Make sure it is capitilized
 ```
 
 ## Plot
@@ -76,11 +83,11 @@ mean_summary <- algae_data %>% #Taking the algae data making new dataset with th
 ```{r mean-algae-plot}
 #Making plot 
 mean_plot <- mean_summary %>% #Name for plot
-  ggplot(aes(x = Site, y = mean_cover)) + #X and y axis
+  ggplot(aes(x = Site, y = Mean_Algae_Cover)) + #X and y axis
   geom_col(fill = "seagreen3") + #color of bars
-  geom_text(aes(label = round(mean_cover, 1), #Rounds the cover to one decimal place
-                color = ifelse(mean_cover == min(mean_cover), "low", #finding the lowest number
-                               ifelse(mean_cover == max(mean_cover), "high", "normal"))), #finding the highest number
+  geom_text(aes(label = round(Mean_Algae_Cover, 1), #Rounds the cover to one decimal place
+                color = ifelse(Mean_Algae_Cover == min(Mean_Algae_Cover), "low", #finding the lowest number
+                               ifelse(Mean_Algae_Cover == max(Mean_Algae_Cover), "high", "normal"))), #finding the highest number
             vjust = -0.5) + #moving the text up above the bars
   scale_color_manual(values = c(low = "red", high = "purple", normal = "black")) + #setting the text colors to highlight low and high
   labs(
