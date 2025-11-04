@@ -102,4 +102,11 @@
    * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_09/Script):
      * Week_09_HW.html - This is the html script I created
      * Week_09_HW.qmd - This is the script I created in qmd
-
+* [**Week_10**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_10): Functions
+   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_10/Data):
+      * longbeach.csv - Data used from TidyTuesdays
+   * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_10/Script):
+     * Week_10_HW.html - This is the html script I created
+     * Week_10_HW.qmd - This is the script I created in qmd
+     * Week_10_In_Class.R - This is the script I did in class
+     * Week_10_Video.R - This is the script I did during the video
