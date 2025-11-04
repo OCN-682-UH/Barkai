@@ -1,0 +1,177 @@
+---
+title: "Week 10 Homework - Functions with Long Beach Animal Shelter dataset"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    theme: cosmo
+    self-contained: true
+    toc: true
+    toc-depth: 2
+editor: visual
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+## Introduction
+
+This document is for my homework for week 10. I decided to use the Long Beach Animal Shelter dataset from [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-04/readme.md#longbeachcsv) for this homework to create different functions.
+
+## Load Libraries
+
+These are the libraries I needed for this homework assignment.
+
+```{r}
+library(tidyverse) #loads a bunch of data-science packages
+```
+
+## Read in data
+
+This data is from Long Beach Animal Shelter dataset on TidyTuesday from years 2017 to 2024.
+
+```{r}
+Data <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-03-04/longbeach.csv') #reading in data from github
+```
+
+## Data Dictionary
+
+This data dictionary is available on [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-03-04/readme.md#longbeachcsv) for the Long Beach Animal Shelter dataset.
+
+## Look at the data
+
+This was to get an idea of what was in the data.
+
+```{r}
+#| echo: false
+glimpse(Data) #look at the data
+```
+
+## Clean up the Data
+
+```{r}
+#Cleaning up the column names 
+Cleaned_Up_Data <- Data %>%
+  select(intake_date, animal_id, animal_type, outcome_type) %>% #selecting the ones I want and also the order I want the columns
+  drop_na(intake_date, animal_type, outcome_type, animal_id)%>% #making sure to drop the NAs if there is some
+  mutate( #Making the column names good
+    animal_type = str_to_title(str_trim(animal_type)), #Capitalizes the first letter of each word then removes any extra spaces at the start or end of each one
+    outcome_type = str_to_title(str_trim(outcome_type)) #Capitalizes the first letter of each word then removes any extra spaces at the start or end of each one
+   ) %>% 
+  filter(outcome_type %in% c("Adoption", "Rescue", "Transfer", "Euthanasia", "Return To Owner")) %>%  #Only keeping these cause they make the most sense and it is enough data with only these
+  rename( `Animal Species` = animal_type, `Outcome Associated with Animal` = outcome_type, `Intake Date` = intake_date, `Animal ID` = animal_id ) #putting clearer names
+
+Cleaned_Up_Data
+```
+
+## Non-plot Function
+
+This function is for creating a table that shows how many times each value appears in a column and what percentage of the total each value represents. It is sorted from most to least frequent.
+
+```{r}
+percent_of_total_table <- function(df, column) {#Taking the data frame you want and the column
+  df %>%
+    count({{column}}) %>% # Count each value
+    rename(Count = n) %>% # Rename n to Count
+    mutate(percent = Count / sum(Count) * 100) %>%  # Calculate percent
+    arrange(desc(Count)) # Sort by count descending
+}
+```
+
+### Example 1 with Non-plot Function
+
+```{r}
+#This makes a table of animal outcomes from the shelter using the percent_of_total_table function I made
+animal_outcome <- percent_of_total_table(Cleaned_Up_Data, `Outcome Associated with Animal`) #table of counts and percentages of each animal outcome
+
+animal_outcome #see table
+```
+
+### Example 2 with Non-plot Function
+
+```{r}
+#This makes a table of animal species from the shelter using the percent_of_total_table function I made
+animal_type_table <- percent_of_total_table(Cleaned_Up_Data, `Animal Species`) #table of counts and percentages of each animal type
+
+animal_type_table
+```
+
+## Plot Function
+
+This function creates a bar plot showing the percentage of each category in a column of a data frame.
+
+```{r}
+plot_category_counts <- function(df, column, 
+    title_text = NULL, subtitle_text = NULL, years = NULL) { #Optional stuff to add cause I wanted it specific for my data
+  df_summary <- df %>%
+    count({{column}}) %>% # Count each category
+    mutate(percent = n / sum(n) * 100) %>% # Calculate percent
+    arrange(desc(n)) # Sort by count descending
+  # Column name
+  col_name <- deparse(substitute(column)) #Making column name not a character string
+ # If no title is provided, create a default one
+  if (is.null(title_text)) { #see if there is a title provided
+    title_text <- paste("Distribution of", col_name) #Default title
+  }
+  #Add years if provided
+  if (!is.null(years)) { #see if there is years provided
+    title_text <- paste(title_text, "(", years, ")", sep = " ") #Puts the years in parentheses 
+  }
+  #Plot
+  ggplot(df_summary, 
+         aes(x = reorder({{column}}, percent), #sorts the x-axis by descending percentage
+             y = percent)) + #bar height is the percent of total
+    geom_col(fill = "steelblue") + # Bar color
+    geom_text(aes(label = paste0(round(percent, 1), "%")), #Rounds percent to 1 decimal and adds %
+              vjust = -0.5) + # Percent labels above bars
+    scale_y_continuous(expand = expansion(mult = c(0, 0.1)))+ # Adds 10% padding on top so not cut off
+    labs( #Labeling
+      title = title_text,
+      subtitle = subtitle_text,
+      x = col_name,
+      y = "Percent of Total"
+    ) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1), # Rotate x-axis labels
+          legend.position = "none") # Hide legend
+}
+```
+
+### Example 1 with Plot Function
+
+```{r}
+#This shows a plot of the animal outcomes from the shelter using plot_category_counts function I made
+outcome_plot <- plot_category_counts(
+  Cleaned_Up_Data, 
+  `Outcome Associated with Animal`,
+  title_text = "Animal Outcomes of Long Beach Animal Shelter", #custom title 
+  subtitle_text = "Data from Long Beach Animal Shelter dataset on TidyTuesday", #custom subtitle 
+  years = "2017-2024"
+)
+print(outcome_plot)
+```
+
+### Example 2 with Plot Function
+
+```{r}
+#This shows a plot of the animal species from the shelter using plot_category_counts function I made
+animal_plot <- plot_category_counts(
+  Cleaned_Up_Data, 
+  `Animal Species`, 
+  title_text = "Animal Species at Long Beach Animal Shelter",  #custom title 
+  subtitle_text = "Data from Long Beach Animal Shelter dataset on TidyTuesday",  #custom subtitle 
+  years = "2017-2024"
+)
+print(animal_plot)
+```
+
+For Reproducibility - package and R version info used
+
+```{r}
+#| echo: true
+#| eval: true
+#| output: collapse
+sessionInfo()
+ #This shows the person what package versions and R version info I used
+```
