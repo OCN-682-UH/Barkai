@@ -1,0 +1,12 @@
+name: Plastic_Pollution_App
+title: Plastic_Pollution_App
+username: leahbarkaiapp
+account: leahbarkaiapp
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16034986
+bundleId: 11164270
+url: https://leahbarkaiapp.shinyapps.io/Plastic_Pollution_App/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

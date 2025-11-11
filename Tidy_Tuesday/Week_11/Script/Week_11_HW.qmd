@@ -1,0 +1,128 @@
+---
+title: "Week 11 Homework - TidyTuesday Trying gt Table"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    theme: cosmo
+    self-contained: true
+    toc: true
+    toc-depth: 2
+editor: visual
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    fig.path: "../Output/" ## added the ../ because my qmd folder is in my scripts folder so need to go up one directory and then into my output folder
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+## Introduction
+
+This document is for my homework for week 11. With the [Lead concentration in Flint water samples in 2015](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-04/readme.md#lead-concentration-in-flint-water-samples-in-2015) dataset from TidyTuesday, I learned how to use the gt package and clean up a table.
+
+## Load Libraries
+
+These are the libraries I needed for this homework assignment.
+
+```{r}
+library(dplyr)   # for data manipulation and creating the summary table
+library(gt)      # for creating and styling the table
+library(scales)  # for the color scaling of 'Samples > 15 ppb'
+library(readr)   # read_csv()
+```
+
+## Read in data
+
+This data was from TidyTuesday [Lead concentration in Flint water samples in 2015](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-04/readme.md#lead-concentration-in-flint-water-samples-in-2015). The samples were collected by the Michigan Department of Environment (MDEQ) and data from a citizen science project coordinated by Prof Marc Edwards and colleagues at Virginia Tech. These samples were collected after concerns were raised about the MDEQ excluding samples from their data.
+
+```{r}
+flint_mdeq = read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-11-04/flint_mdeq.csv")
+flint_vt = read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-11-04/flint_vt.csv")
+```
+
+## Data Dictionary
+
+This data dictionary is available on [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-04/readme.md#data-dictionary) for the flint lead concentrations in 2015.
+
+## Look at the data
+
+This was to get an idea of what was in the data.
+
+```{r}
+#| echo: false
+glimpse(flint_mdeq)
+glimpse(flint_vt)
+```
+
+## Clean the Data
+
+```{r}
+# Remove NAs from MDEQ
+flint_mdeq_clean <- flint_mdeq %>%
+  filter(!is.na(lead2)) # keep only rows where lead2 is not NA
+
+# Remove NAs from Virginia Tech
+flint_vt_clean <- flint_vt %>%
+  filter(!is.na(lead)) # keep only rows where lead is not NA
+```
+
+## Summary Table
+
+```{r flint-lead-summary}
+# create summary table
+summary_table_clean <- bind_rows(
+  flint_mdeq_clean %>%
+    summarise(
+      Dataset = "MDEQ", #Label row MDEQ
+      `Total Samples` = n(), #Count total samples
+      `Samples (>15 ppb)` = sum(lead2 > 15), #Count ones over 15 
+      `Mean Lead (ppb)` = mean(lead2), #Find mean 
+      `Median Lead (ppb)` = median(lead2), #Find median
+      `90th Percentile (ppb)` = quantile(lead2, 0.9)), #Calculate 90th percentile 
+  flint_vt_clean %>%
+    summarise(
+      Dataset = "Virginia Tech", #Label row
+      `Total Samples` = n(), #Count total samples
+      `Samples (>15 ppb)` = sum(lead > 15), #Count ones over 15 
+      `Mean Lead (ppb)` = mean(lead), #Find mean
+      `Median Lead (ppb)` = median(lead), #Find median
+      `90th Percentile (ppb)` = quantile(lead, 0.9))) #Calculate 90th percentile
+
+write.csv(summary_table_clean,"~/Desktop/Fall 2025/Data Science Fundamentals in R - MBIO 612/repository/Barkai/Tidy_Tuesday/Week_11/Output/flint_lead_summary.csv", row.names = FALSE) # Save as CSV 
+
+# Build gt table
+flint_summary_table <- summary_table_clean %>%
+  gt() %>%
+  tab_header( # Title and subtitle
+    title = "Lead Levels in Flint Water Samples (2015)", subtitle = "Comparison of MDEQ and Virginia Tech datasets") %>%
+  fmt_number( # Display with 2 decimal places
+    columns = c("Mean Lead (ppb)", "Median Lead (ppb)", "90th Percentile (ppb)"), decimals = 2) %>%
+  tab_style( # Add gray fill to Virginia Tech row
+    style = cell_fill(color = "gray95"), locations = cells_body(rows = trimws(as.character(Dataset)) == "Virginia Tech")) %>%
+  data_color( # Red/blue color scale
+    columns = c("Samples (>15 ppb)"), fn = scales::col_numeric(palette = c("lightblue", "red"), domain = NULL)) %>%
+  tab_style( # Add borders around all cells at once
+    style = cell_borders(sides = c("left", "right", "top", "bottom"), color = "black", weight = px(1)), locations = cells_body(columns = everything())) %>%
+  tab_style( # Add bottom and side borders for column labels
+    style = cell_borders(sides = c("bottom", "left", "right"), color = "black", weight = px(1)), locations = cells_column_labels(columns = everything())) %>%
+  cols_align( # Center numeric columns
+    align = "center", columns = c("Total Samples", "Samples (>15 ppb)", "Mean Lead (ppb)", "Median Lead (ppb)", "90th Percentile (ppb)")) %>%
+  tab_options( # Table options
+    table.border.top.width = px(0), table.border.left.width = px(0), table.border.bottom.width
+    = px(1), table.font.size = 14) %>%
+  tab_footnote( # Footnote for color meaning
+    footnote = "Color scale in 'Samples (>15 ppb)': light blue = fewer samples above 15 ppb; red = many samples above 15 ppb", locations = cells_column_labels(columns = c("Samples (>15 ppb)"))) %>%
+  tab_footnote( # Footnote explaining datasets
+    footnote = "Dataset key: MDEQ = Michigan Department of Environment samples; Virginia Tech = citizen science samples collected by Prof Marc Edwards and team (all lead levels in ppb)", locations = cells_column_labels(columns = c("Dataset")))
+
+flint_summary_table
+
+#save
+gtsave(flint_summary_table,
+  filename = "~/Desktop/Fall 2025/Data Science Fundamentals in R - MBIO 612/repository/Barkai/Tidy_Tuesday/Week_11/Output/flint_lead_summary.png"
+)
+```
+
+[Summary of table:]{.underline}
+
+The table compares lead levels in Flint water samples collected by MDEQ and Virginia Tech in 2015. Most samples in both datasets are below 15 ppb, but Virginia Tech’s citizen-science data captured more extreme values, with higher mean and 90th percentile lead levels. This highlights that while typical water samples had low lead, some locations experienced significantly elevated levels.
