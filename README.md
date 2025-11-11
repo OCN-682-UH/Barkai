@@ -22,6 +22,13 @@
      * Badplot_goodplot_files/libs - Folder of Badplot_goodplot
      * Badplot_goodplot.html - HTML of Badplot_goodplot
      * Badplot_goodplot.qmd - qmd of Badplot_goodplot
+* [**Tidy_Tuesday**](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday): Good plot Bad plot Assignment
+  * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Output):
+     * flint_lead_summary.csv - Table in csv
+     * flint_lead_summary.png - Png output
+  * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Script):
+     * Week_11_HW.html - HTML of Tidy_Tuesday Week 11
+     * Week_11_HW.qmd - qmd of Tidy_Tuesday Week 11
 * [**Week_02**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02): Reproducible scripts and workflow/importing data
   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Data): weightdata.csv - this has data on treatments and weight for each sample
   * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Scripts): Week02_script - this is the first script that has loading libraries, read in data and data analysis
@@ -110,3 +117,12 @@
      * Week_10_HW.qmd - This is the script I created in qmd
      * Week_10_In_Class.R - This is the script I did in class
      * Week_10_Video.R - This is the script I did during the video
+* [**Week_11**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_11): Functions
+   * [Plastic_Pollution_App](https://github.com/OCN-682-UH/Barkai/tree/main/Week_11/Plastic_Pollution_App):
+      *  URL: https://leahbarkaiapp.shinyapps.io/Plastic_Pollution_App/
+      * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_11/Plastic_Pollution_App/Script):
+         * app.R - Script for my app
+      * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_11/Plastic_Pollution_App/Data):
+         * plastic_clean.csv - Data I saved
+         * plastic_summary_wide.csv - More data
+         * plastic_table.csv - Last data
