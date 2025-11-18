@@ -1,0 +1,119 @@
+---
+title: "Week 12 Homework - TidyTuesday 2 Trying fable package to do forecasting"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    theme: cosmo
+    self-contained: true
+    toc: true
+    toc-depth: 2
+editor: visual
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    fig.path: "../Output/" ## added the ../ because my qmd folder is in my scripts folder so need to go up one directory and then into my output folder
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+## Introduction
+
+This document is for my homework for week 12. With the [WHO TB Burden Data: Incidence, Mortality, and Population](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-11/readme.md#who-tb-burden-data-incidence-mortality-and-population) dataset from TidyTuesday, I learned how to use the fable package to do time-series forecasting/modeling.
+
+## Load Libraries
+
+These are the libraries I needed for this homework assignment.
+
+```{r}
+library(tidyverse)
+library(tidytuesdayR) #Data
+library(tsibble) # Core package for tidy time series
+library(fable)   # Modeling and forecasting (includes model() and forecast())
+library(fabletools) # Modeling tools (often loaded with fable)
+library(scales) # For formatting large numbers on the axis
+
+```
+
+## Read in data
+
+This data was from TidyTuesday [WHO TB Burden Data: Incidence, Mortality, and Population](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-11/readme.md#who-tb-burden-data-incidence-mortality-and-population). This is global tuberculosis (TB) burden estimates from the World Health Organization, using data curated via [the getTBinR R package by Sam Abbott](https://samabbott.co.uk/getTBinR/).
+
+```{r}
+tuesdata <- tt_load(2025, week = 45)  # approximate week — check which week corresponds to Nov 11
+who_tb_data <- tuesdata$who_tb_data
+```
+
+## Data Dictionary
+
+This data dictionary is available on [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-11/readme.md#data-dictionary) for the Who TB Burden Data.
+
+## Look at the data
+
+This was to get an idea of what was in the data.
+
+```{r}
+#| echo: false
+glimpse(who_tb_data)
+```
+
+## Clean the Data
+
+```{r}
+# Focusing on the Philippines for the time series
+target_country <- "Philippines"
+
+clean_data <- who_tb_data %>%
+  filter(country == target_country) %>%  # Filtering to chosen country
+  select(year, e_inc_num, e_pop_num) %>% # Select year, metric, and population column 
+  mutate(rate_per_100k = (e_inc_num / e_pop_num) * 100000) %>% #Calculate the Incidence Rate per 100,000 people
+  select(year, value = rate_per_100k) %>% #Select time series columns and rename
+  mutate(value = replace_na(value, 0)) %>% # Dealing with any missing values
+  
+  # Convert to a tsibble which is a special data frame for time series
+  as_tsibble(index = year)
+
+# Show the tsibble structure
+clean_data
+```
+
+## Time-Series Modeling and Forecasting
+
+```{r TB Philippines Modeling and Forecasting}
+# Create the model using the clean_data (Incidence Rate per 100k)
+tb_model <- clean_data %>%
+  model(
+    ETS_model = ETS(value)) # Use the Exponential Smoothing model (ETS) with value which is a time-series forecasting method which makes predictions by giving more weight to recent observations and less weight to older ones - it is exponetial bc it is gradually decreasing weight
+
+# Forecast for 5 years ahead
+forecast_horizon <- 5
+tb_forecast <- tb_model %>%      #Fitted model to function
+  forecast(h = forecast_horizon) #Calculating future values 
+
+# Display the forecast results
+tb_forecast
+
+# Combine historical data and forecast in single plot
+tb_plot <- tb_forecast %>%
+  autoplot(clean_data) + # autoplot is the specialized plotting function for forecast objects
+  labs( #About the plot
+    title = paste("Forecast of Estimated TB Incidence Rate for The Philippines (2022-2026)"),
+    subtitle = "Fitted with an ETS Model to the Rate per 100,000 population",
+    y = "Estimated Incidence Rate (per 100,000)",
+    x = "Year"
+  ) +
+  # Format the Y-axis to display numbers nicely
+  scale_y_continuous(labels = scales::number_format(accuracy = 1)) + 
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "bottom") + 
+  #X-axis 
+  scale_x_continuous(
+    breaks = seq(from = 2000, to = 2026, by = 5), #Every 5 years 
+    labels = scales::label_number(accuracy = 1, big.mark = "")) #Whole numbers and remove thousands separator
+
+#Printing it here
+tb_plot
+```
+
+[Summary of table:]{.underline}
+
+The ETS model predicts that the TB Incidence (basically new cases) Rate (per 100,000) for the Philippines will stabilize near 645 by 2026, following a period of recent volatility, meaning the values have fluctuated in an unstable pattern. The purple shaded areas (prediction intervals) are very wide, demonstrating high uncertainty in the forecast due to the turbulent historical data. The 95% interval is particularly broad, indicating the true rate could be anywhere between approximately 560 and 730 per 100,000, underscoring the significant challenge in predicting the region's future TB burden. I standardized the measure to cases per 100,000 people because different countries have different population sizes.
