@@ -1,0 +1,165 @@
+---
+title: "Week 13 Homework - For loop and map() functions"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    theme: cosmo
+    self-contained: true
+    toc: true
+    toc-depth: 2
+editor: visual
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+## Introduction
+
+This document is for my homework for week 13. I used the 4 .csv files provided and calculated the mean and standard deviation of both temp and light for each tide pool while using for loop and map().
+
+## Load Libraries
+
+These are the libraries I needed for this homework assignment.
+
+```{r}
+library(tidyverse)
+library(here) # Useful for finding files if they are in a specific folder
+```
+
+## Read in data
+
+This data was provided by Nyssa Silbiger my professor.
+
+```{r}
+Data <- here("Week_13", "Data") #reading in data 
+```
+
+## Data Dictionary
+
+```{r}
+variable_name <- c( #Defining variable name
+  "Foundation_spp",
+  "Date.Time",
+  "Intensity.lux")
+description <- c( #Defining the rows for the description
+  "Type of foundation species: Surfgrass or mussel dominated pool",
+  "Date and time of the observation/measurement",
+  "Light level measured in lux (Lx)")
+data_dictionary <- data.frame( #Making a data frame with labeled columns
+  "Variable Name" = variable_name, # First column header
+  "Description" = description,     # Second column header
+  stringsAsFactors = FALSE)
+
+print(data_dictionary)
+```
+
+## Look at the data
+
+This was to get an idea of what was in the data.
+
+```{r}
+#| echo: false
+
+files_to_read <- list.files( #Reading all raw tide pool data into one dataframe
+  path = Data, #Look into folder
+  pattern = "TP.*\\.csv", #Filter for csv files that begin with TP
+  full.names = TRUE) #Return complete path 
+
+raw_data <- files_to_read %>% #Combining all raw tide pool data into one dataframe
+  set_names() %>% #Takes the full names
+  map_dfr(~ read_csv(.x, show_col_types = FALSE), .id = "File_Source") #Putting it in the dataframe
+
+print(raw_data)
+```
+
+## Clean up the Data
+
+```{r}
+cleaned_data <- raw_data %>%
+  mutate(
+    DateTime = mdy_hm(`Date.Time`), #Converts date and time
+    Temp_C = `Temp.C`, #Making it consistant 
+    Intensity_lux = `Intensity.lux`, #Making it consistant 
+    `Habitat Type` = as.factor(str_to_title(str_trim(Foundation_spp))), # Remove whitespace 
+    `Experimental Treatment` = as.factor(str_to_title(str_trim(Removal_Control))) # Deals with capitalizaiton 
+  ) %>%
+  drop_na(Temp_C, Intensity_lux, `Habitat Type`) %>% #Drop NAs
+  select( #Selecting the data and names
+    File_Source, PoolID, 
+    `Habitat Type`, 
+    `Experimental Treatment`, 
+    DateTime, 
+    `Temperature (C)` = Temp_C,
+    `Light Intensity (lux)` = Intensity_lux,
+    LoggerDepth)
+
+glimpse(cleaned_data)
+```
+
+## Using map ()
+
+This function is for creating a table that shows how many times each value appears in a column and what percentage of the total each value represents. It is sorted from most to least frequent.
+
+```{r}
+
+pool_ids <- unique(cleaned_data$PoolID) #Get list of unique Pool IDs
+
+calculate_summary <- function(current_id) { #Define function to apply to each Pool ID
+  data_subset <- cleaned_data %>% 
+    filter(PoolID == current_id) #Filter data for current Pool ID
+  summary_row <- data_subset %>% # Calculate summaries 
+    summarise(
+      Mean_Temp_C = mean(`Temperature (C)`, na.rm = TRUE),
+      SD_Temp_C = sd(`Temperature (C)`, na.rm = TRUE),
+      Mean_Intensity_lux = mean(`Light Intensity (lux)`, na.rm = TRUE),
+      SD_Intensity_lux = sd(`Light Intensity (lux)`, na.rm = TRUE),
+      .groups = 'drop') %>%
+    mutate(PoolID = current_id) # Add identifier back
+  return(summary_row)} # Return calculated row
+
+final_map_results <- pool_ids %>% 
+  map_dfr(calculate_summary) %>% # Run function over every pool ID and combine results
+  select(PoolID, everything()) # Reorder Pool ID column
+
+print(final_map_results) #Display results 
+
+write_csv( #Save
+    final_map_results,
+    file = "../Output/tidepool_summary_map.csv")
+```
+
+## Using for loop
+
+```{r}
+
+pool_ids <- unique(cleaned_data$PoolID) #Get list of unique Pool IDs
+summary_list <- list() #Make empty list to store the results
+
+for (i in seq_along(pool_ids)) { #Set up
+  current_id <- pool_ids[i] # Assigns current ID
+  
+  data_subset <- cleaned_data %>%
+    filter(PoolID == current_id) #Filter data for current Pool ID
+  
+  summary_row <- data_subset %>% #Calculate summaries 
+    summarise(
+      Mean_Temp_C = mean(`Temperature (C)`, na.rm = TRUE),
+      SD_Temp_C = sd(`Temperature (C)`, na.rm = TRUE),
+      Mean_Intensity_lux = mean(`Light Intensity (lux)`, na.rm = TRUE),
+      SD_Intensity_lux = sd(`Light Intensity (lux)`, na.rm = TRUE)) %>%
+    mutate(PoolID = current_id) # Add identifier back
+  summary_list[[i]] <- summary_row} # Results in list
+
+final_for_loop_results <- bind_rows(summary_list) %>% #Combine everything 
+  select(PoolID, everything()) # Reorder Pool ID column
+
+print(final_for_loop_results) #View
+
+write_csv( # Save
+    final_for_loop_results,
+    file = "../Output/tidepool_summary_for_loop.csv")
+```
+
+### 

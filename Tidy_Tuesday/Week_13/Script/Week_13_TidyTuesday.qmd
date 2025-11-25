@@ -1,0 +1,131 @@
+---
+title: "Week 13 Homework - TidyTuesday 3 - Learning how to do Term Frequency-Inverse Document Frequency (TF-IDF)"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    theme: cosmo
+    self-contained: true
+    toc: true
+    toc-depth: 2
+editor: visual
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+## Introduction
+
+This document is for my homework for week 13, using [The Complete Sherlock Holmes](Complete%20Sherlock%20Holmes) dataset from TidyTuesday. The dataset has the full text of Sir Arthur Conan Doyle's novels and short stories.
+
+In this assignment, I learned how to perform a Term Frequency-Inverse Document Frequency (TF-IDF) analysis which basically tells you how important a word is to a document. TF-IDF moves beyond simple word counts to reveal the vocabulary unique to the document. I decided to focus on the "A Study In Scarlet" book.
+
+## Load Libraries
+
+These are the libraries I needed for this TidyTuesday assignment.
+
+```{r}
+library(tidytext)      # Used to calculate TF-IDF
+library(stringr)       # Clean the data
+library(tidyverse)     # Making plot
+library(tidytuesdayR)  # Get the data
+library(here)          # Save right place
+```
+
+## Read in data
+
+This data was from TidyTuesday's [The Complete Sherlock Holmes](Complete%20Sherlock%20Holmes) dataset.
+
+```{r}
+SherlockData <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-11-18/holmes.csv')
+```
+
+## Data Dictionary
+
+This data dictionary is available on [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-18/readme.md#data-dictionary) for the Complete Sherlock Holmes Data.
+
+## Look at the data
+
+This was to get an idea of what was in the data.
+
+```{r}
+#| echo: false
+glimpse(SherlockData) #Look at the data cause it isn't in a data folder just from TidyTuesday
+```
+
+## Clean the Data
+
+```{r}
+SherlockData_clean <- SherlockData %>%
+  filter(!is.na(text)) %>%  #Remove rows where NAs are in the text
+  filter(book == "A Study In Scarlet") %>% # Keep only the text from "A Study In Scarlet"
+  mutate(
+    text = str_replace_all(text, "\u00A0", " "), #Replace non-breaking space character (\u00A0) with a regular space
+    text = str_remove_all(text, "[[:punct:]]") #Remove all punctuation before tokenization
+  ) %>%
+  filter(
+    !str_detect(text, "chapter|part|table of contents")) # Filter out lines that are navigational
+```
+
+## Data Analysis 
+
+```{r}
+# ---------------------------------------------------
+## Tokenization
+# ---------------------------------------------------
+
+SherlockData_words <- SherlockData_clean %>%
+  select(-line_num) %>% # Remove line_num column cuz don't need
+  unnest_tokens(word, text) %>% #Makes each line a individual word
+  anti_join(stop_words, by = "word") %>% #Remove stop words like the, is, a, etc. 
+  filter(word != "") #Remove empty strings
+
+# ---------------------------------------------------
+## Term Frequency (TF) Calculation
+# ---------------------------------------------------
+
+SherlockData_tf <- SherlockData_words %>%  # Count total number of times each word appears
+  count(word, sort = TRUE) %>% # Count total number of times each word appears
+  mutate(tf = n / sum(n)) %>% # Calculate Term Frequency (TF): n / total number of words
+  arrange(desc(tf)) # Arrange by TF value - find most frequent words
+
+# ---------------------------------------------------
+## Plot
+# ---------------------------------------------------
+
+top_n_words <- 10
+
+Sherlock_plot <- SherlockData_tf %>%
+  top_n(top_n_words, tf) %>% # Get top N words based on their tf score
+  mutate(word = reorder(word, tf)) %>% #Ordering
+  ggplot(aes(x = tf, y = word)) + # Plot with x and y axis
+  geom_col(fill = "#0072B2") + #Color
+  geom_text(aes(label = round(tf, 3)), # Show TF score with 3 decimal places
+            hjust = -0.1,              # Position the label slightly outside the bar end
+            size = 3.5,                # Set font size
+            color = "black") +         # Set text color
+  labs( #Text
+    title = paste("Top", top_n_words, "Words by Term Frequency (TF)"),
+    subtitle = paste("Novel: 'A Study In Scarlet' by Arthur Conan Doyle"),
+    x = "Term Frequency (TF)", y = NULL,
+    caption = "Source: SherlockData TidyTuesday") +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.15))) + #Making sure labels fit
+  theme_minimal() + #Theme
+  theme( #Extra settings
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(size = 10, color = "gray40"),
+    panel.grid.major.y = element_blank(), # Remove horizontal lines
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.x = element_line(linetype = "dotted", color = "gray70"), # Dotted lines for emphasis
+    legend.position = "none") # Remove the legend
+  
+# Save plot to the output folder
+ggsave("../Output/scarlet_top_words.png", plot = Sherlock_plot, width = 8, height = 5)
+
+print(Sherlock_plot)
+```
+
+[Summary of plot:]{.underline}
+
+The bar chart highlights the Top 10 most frequent words in the novel *A Study in Scarlet*, based on their Term Frequency (TF) score rounded the numbers to the nearest thousandths place. The data clearly shows a strong focus on the primary character, with the name "holmes" dominating the list at a TF of 0.007, significantly higher than any other word. The second most frequent word is "time" (0.005). The remaining eight words are tightly clustered at a TF of 0.004.
