@@ -36,6 +36,12 @@
      * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_12/Script):
         * Week_12_HW.html - HTML of Tidy_Tuesday Week 12
         * Week_12_HW.qmd - qmd of Tidy_Tuesday Week 12
+   * [Week_13](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_13):
+     * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_13/Output):
+        * scarlet_top_words.png - Png output
+     * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_13/Script):
+        * Week_13_TidyTuesday.html - HTML of Tidy_Tuesday Week 13
+        * Week_13_TidyTuesday.qmd - qmd of Tidy_Tuesday Week 13
 * [**Week_02**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02): Reproducible scripts and workflow/importing data
   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Data): weightdata.csv - this has data on treatments and weight for each sample
   * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Scripts): Week02_script - this is the first script that has loading libraries, read in data and data analysis
@@ -133,3 +139,17 @@
          * plastic_clean.csv - Data I saved
          * plastic_summary_wide.csv - More data
          * plastic_table.csv - Last data
+* [**Week_13**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13): Iterative coding and intro to models
+      * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Data):
+         * TP1.csv - Data I was given
+         * TP2.csv - More data
+         * TP3.csv - More data
+         * TP4.csv - More data 
+      * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Output):
+         * tidepool_summary_for_loop.csv - Table of for loops summary
+         * tidepool_summary_map.csv - Table of maps summary
+      * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Script):
+         * Week_13_HW.html - Html HW
+         * Week_13_HW.qmd - qmd HW
+         * Week_13_Inclass.R - In Class Notes
+         * Week_13_Inclass_pt2.R - In Class Notes Part 2
