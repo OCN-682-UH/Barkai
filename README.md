@@ -42,6 +42,12 @@
      * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_13/Script):
         * Week_13_TidyTuesday.html - HTML of Tidy_Tuesday Week 13
         * Week_13_TidyTuesday.qmd - qmd of Tidy_Tuesday Week 13
+   * [Week_14](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_14):
+     * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_14/Output):
+        * spi_slope_chart_EAP.png - Png output
+     * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_14/Script):
+        * Week_14_TidyTuesday.html - HTML of Tidy_Tuesday Week 14
+        * Week_14_TidyTuesday.qmd - qmd of Tidy_Tuesday Week 14
 * [**Week_02**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02): Reproducible scripts and workflow/importing data
   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Data): weightdata.csv - this has data on treatments and weight for each sample
   * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Scripts): Week02_script - this is the first script that has loading libraries, read in data and data analysis
