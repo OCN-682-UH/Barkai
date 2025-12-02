@@ -146,15 +146,15 @@
          * plastic_summary_wide.csv - More data
          * plastic_table.csv - Last data
 * [**Week_13**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13): Iterative coding and intro to models
-      * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Data):
+  * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Data):
          * TP1.csv - Data I was given
          * TP2.csv - More data
          * TP3.csv - More data
          * TP4.csv - More data 
-      * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Output):
+   * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Output):
          * tidepool_summary_for_loop.csv - Table of for loops summary
          * tidepool_summary_map.csv - Table of maps summary
-      * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Script):
+   * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Week_13/Script):
          * Week_13_HW.html - Html HW
          * Week_13_HW.qmd - qmd HW
          * Week_13_Inclass.R - In Class Notes
