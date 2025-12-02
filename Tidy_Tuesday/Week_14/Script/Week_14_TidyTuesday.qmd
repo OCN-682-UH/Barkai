@@ -1,0 +1,133 @@
+---
+title: "Week 14 Homework - TidyTuesday 4 - Learning how to do a slope chart"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    theme: cosmo
+    self-contained: true
+    toc: true
+    toc-depth: 2
+editor: visual
+knitr: #this is to save figures automatically 
+  opts_chunk:
+    message: false #gets rid of messages from code
+    warning: false #gets rid of warnings from code
+---
+
+## Introduction
+
+This document presents my Week 14 homework, using [Statistical Performance Indicators](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-25/readme.md#statistical-performance-indicators) (SPI) dataset from TidyTuesday. The dataset measures the capacity and performance of National Statistical Systems across the globe.
+
+In this assignment, I learned how to create a slope chart to visualize the starting (2018 score), the ending (2023 score), and amount of the score changed for each country. I decided to focus on the East Asia and Pacific region.
+
+## Load Libraries
+
+The following R libraries were used for this TidyTuesday assignment.
+
+```{r}
+library(tidyverse)     # Data manipulation and visualization
+library(tidyr)         # Transforming the data into the wide format
+library(forcats)       # Used for fct_reorder in the plotting section
+library(here)          # Helps with file path
+```
+
+## Read in data
+
+This data was from TidyTuesday's [Statistical Performance Indicators](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-25/readme.md#statistical-performance-indicators) dataset.
+
+```{r}
+spi_indicators <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-11-25/spi_indicators.csv')
+```
+
+## Data Dictionary
+
+This data dictionary is available on [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-11-25/readme.md#data-dictionary) for the Statistical Performance Indicators data.
+
+## Look at the data
+
+This was to get an idea of what was in the data.
+
+```{r}
+#| echo: false
+glimpse(spi_indicators) #Look at the data cause it isn't in a data folder just from TidyTuesday
+```
+
+## Cleaning Data
+
+```{r}
+slope_data <- spi_indicators %>%
+  filter(
+    year %in% c(2018, 2023), #Keeps only these two years 
+    region == "East Asia & Pacific") %>% #Keeps only EAP region
+  select(country, region, year, overall_score) %>% #Keeps these columns
+  
+  pivot_wider( #Pivot data wide
+    names_from = year, #Create new columns
+    names_prefix = "score_", #Naming the columns by year
+    values_from = overall_score) %>% #Moving the scores
+
+ mutate(
+   change = score_2023 - score_2018, #Calculate score difference
+    performance_change = case_when( #Categoize change outcome 
+      change > 0 ~ "Improved", #Positive change
+      change < 0 ~ "Declined", #Negative change
+      .default = "No Change")) %>% #No change
+
+filter(!is.na(score_2018) & !is.na(score_2023)) %>% #Remove lines with NAs
+
+arrange(desc(change)) #Sort the data from largest gain at the top 
+
+print(head(slope_data))
+```
+
+## Data Analysis
+
+```{r}
+max_score <- max(slope_data$score_2018, slope_data$score_2023, na.rm = TRUE) #Find max score to do axis limit
+
+slope_chart <- ggplot(slope_data, #Make slope chart
+                      aes(y = fct_reorder(country, change))) + #Order y-axis by change with most at the top 
+  geom_segment(
+    aes(x = score_2018, xend = score_2023, #Draw line between these two points
+        color = performance_change), #Color the line based on calculated category whether it was improved or declined
+    linewidth = 1.5, #Thicker
+    alpha = 0.7 ) + #Transparent
+
+  geom_point(
+    aes(x = score_2018), color = "#1f78b4", size = 4) + # 2018 dot info
+  geom_point(
+    aes(x = score_2023), color = "#e31a1c", size = 4) + #2023 dot info
+  
+  geom_text(
+    aes(x = score_2023, #x-axis position
+        # Format label: add '+' for gains, round to 1 decimal
+        label = paste0(ifelse(change > 0, "+", ""), #Label for the change
+                       format(round(change, 1), nsmall = 1)), #Number to display
+        color = performance_change), # Color text to match line color
+    size = 3.5, vjust = 0.5, hjust = -0.2) + #Location of label
+  
+  coord_cartesian(xlim = c(min(slope_data$score_2018) - 5, max_score + 7)) + #Extend a-axis so nothing is cut off
+  
+  scale_color_manual(
+    values = c("Improved" = "darkgreen", "Declined" = "darkred", "No Change" = "gray50")
+  ) + #Color of line
+  labs( #Titles
+    title = "Change in Statistical Performance: East Asia & Pacific Region",
+    subtitle = "Comparing Overall SPI Score: 2018 (Blue Dot) vs 2023 (Red Dot)",
+    caption = "Source: Statistical Performance Indicators (via TidyTuesday)",
+    y = NULL,
+    x = "Overall Statistical Performance Indicators (SPI) Score"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none", legend.title = element_blank()) #No legend
+
+# Save the plot
+ggsave("../Output/spi_slope_chart_EAP.png", plot = slope_chart, width = 8, height = 10)
+
+print(slope_chart)
+```
+
+[Summary of Plot:]{.underline}
+
+The Slope Chart visualizes the change in the Overall SPI Score for the East Asia & Pacific region between 2018 and 2023. The key finding is that all countries in the filtered dataset saw an increase in their overall SPI Score from 2018 to 2023. This is visually represented by the fact that all connecting lines are colored green (indicating 'Improved') and all lines slope upward from the blue (2018) dot to the red (2023) dot.
