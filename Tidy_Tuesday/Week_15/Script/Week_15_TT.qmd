@@ -1,0 +1,143 @@
+---
+title: "Week 15 Homework TidyTuesday 5 - Learning how to customize quarto theme"
+author: "Leah Barkai"
+date: today
+format: 
+  html:
+    theme:
+      light: [cosmo, styles.scss] #baseline theme is cosmo and applies custom styles from styles.scss file
+    self-contained: true
+    toc: true
+    toc-depth: 3
+    code-fold: true 
+editor: visual
+knitr: 
+  opts_chunk: #Applies options to all code chucks
+    message: false
+    warning: false 
+execute:
+  echo: true
+---
+
+## Introduction
+
+This document presents my Week 15 homework, using [Can an exploding snowman predict the summer season?](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-12-02/readme.md#can-an-exploding-snowman-predict-the-summer-season) dataset from TidyTuesday. The dataset measures the burn duration of the Böögg effigy and various climate variables in Zurich, Switzerland, dating back to 1900.
+
+In this assignment, I learned how to customize Quarto's built-in themes using SCSS and applied various analytical techniques to the historical weather data. I performed correlation analysis to quantify the strength of the Böögg's prediction and explored how that predictive power has changed over time.
+
+I also made the data dictionary more presentable than what was provided on TidyTuesday.
+
+## Load Libraries
+
+The following R libraries were used for this TidyTuesday assignment.
+
+```{r}
+#| label: load-libraries
+#| echo: true
+library(tidyverse)     # Loads core R packages for data handling and plotting
+library(kableExtra)    # Needed for styling the HTML table/data dictionary
+library(tidyr)         # Helps with tidying/reshaping data
+library(here)          # Constructs file paths reliably
+```
+
+## Read in data
+
+This data was from TidyTuesday's [Can an exploding snowman predict the summer season?](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-12-02/readme.md#can-an-exploding-snowman-predict-the-summer-season) dataset.
+
+```{r}
+sechselaeuten <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-02/sechselaeuten.csv')
+```
+
+## Data Dictionary
+
+This data dictionary is available on [TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-12-02/readme.md#sechselaeutencsv) for the sechselaeuten data.
+
+To make the data dictionary visually appealing, I used the **`kableExtra`** R package to transform the raw data into an elegant HTML table. I first created the dictionary data using `tribble()` and then piped it into **`knitr::kable()`** to render the HTML. Finally, I applied advanced styling using **`kable_styling()`** (adding features like **striped rows** and **hover effects**) and used **`row_spec()`** to visually highlight the key predictor variable, `duration`, with bold text and a light blue background.
+
+```{r}
+#| label: styled-data-dictionary
+#| echo: false
+#| message: false
+#| warning: false
+#| results: asis
+
+data_dict <- tribble( #data frame with data dictionary info
+  ~Variable, ~Type, ~Description,
+  "year", "double", "Year of the Sechselaeuten festival.",
+  "duration", "double", "Time elapsed from ignition of Böögg effigy until explosion (in minutes). This is the key predictor variable.",
+  "tre200m0", "double", "Average air temperature 2 m above ground (monthly mean in °C).",
+  "tre200mn", "double", "Minimum air temperature 2 m above ground (absolute monthly minimum in °C).",
+  "tre200mx", "double", "Maximum air temperature 2 m above ground (absolute monthly maximum in °C).",
+  "sre000m0", "double", "Total sunshine duration (monthly total in hours).",
+  "sremaxmv", "double", "Total sunshine duration as a percentage of the possible maximum.",
+  "rre150m0", "double", "Total precipitation (monthly total in mm).",
+  "record", "logical", "Years with average summer temperature above 19 °C."
+)
+
+data_dict %>%
+  knitr::kable(format = "html", align = c('l', 'c', 'l')) %>% #Set format to HTML
+  kable_styling( #themes used
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    font_size = 12,
+    full_width = F # Table will only be as wide as its content
+  ) %>%
+  row_spec(2, bold = TRUE, background = "#f0f8ff") %>% # Uses a light blue background for 2nd row to have it stand out
+  add_header_above(c(" " = 1, "Data Dictionary: sechselaeuten.csv" = 2)) # Add a table header
+```
+
+## Custom Quarto Styling with SCSS
+
+I learned how to use **SCSS (Sass)** to customize Quarto's built-in theme (`cosmo`). SCSS is a preprocessor scripting language that compiles into standard CSS, allowing for cleaner code and the use of variables.
+
+I created a separate file named **`styles.scss`** and linked it in the YAML header (`theme: [cosmo, styles.scss]`).
+
+Below is what I put in the styles.scss text:
+
+```{r}
+# /*-- scss:defaults --*/
+# $primary: #4B0082; - this makes the primary color purple
+# $font-family-sans-serif: 'Georgia', serif; - this is the font
+# $link-color: $primary; - make hyperlinks use primary color
+# $headings-color: $primary; - make headings use it too
+
+# /*-- scss:rules --*/
+# .quarto-title-block .quarto-title-banner { - picking a certain part of the theme
+# background-color: #f0f8ff;} - puts background color of title 
+```
+
+# Plot
+
+Here I made a very simple plot of my data to see how the quarto theme looks like.
+
+```{r}
+#| label: snowman-prediction-plot
+#| echo: true
+#| warning: false
+#| message: false
+#| fig-cap: "Relationship between Böögg Burn Duration and Average Summer Temperature (tre200m0)"
+
+correlation_r <- cor( # Calculate the correlation coefficient (r)
+  x = sechselaeuten$duration, # first variable
+  y = sechselaeuten$tre200m0, #Second variable
+  method = "pearson", #Type of correlation
+  use = "pairwise.complete.obs") #Ignore missing values pair by pair
+
+snowman_plot <- ggplot(sechselaeuten, aes(x = duration, y = tre200m0)) + #Making plot
+  geom_point(color = "#00CED1", size = 3, alpha = 0.7) + #scatter points
+  geom_smooth(method = "lm", color = "#e31a1c", se = FALSE) + #Add linear regression line
+  labs( #Titles and labels
+    title = "Does the Böögg Predict Summer Temperature?",
+    subtitle = paste0("Pearson Correlation (r) = ", round(correlation_r, 3)),
+    x = "Burn Duration (Time until head explodes, in minutes)",
+    y = expression("Average Summer Temperature ("*~degree*C*")"), # Use expression for degree symbol
+    caption = "Data Source: TidyTuesday 2025-12-02") +
+  theme_minimal(base_size = 14) + 
+  theme(plot.title = element_text(face = "bold")) 
+
+print(snowman_plot)
+#Not saving the plot bc the quarto doc is the output for this homework not the plot
+```
+
+[Summary of Plot:]{.underline}
+
+The scatter plot visualizes the weak, negative correlation between the Böögg's burn duration and the subsequent average summer temperature. The linear regression line indicates that as the burn duration increases (slower explosion), the predicted average summer temperature slightly decreases. The points are colored Teal and the regression line is Red for clear contrast.
