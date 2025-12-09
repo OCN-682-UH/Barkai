@@ -9,19 +9,6 @@
 
 **Folders:**
 
-* [**Good_plot_Bad_plot**](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot): Good plot Bad plot Assignment
-  * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Data):
-     * calendar_photo_leap_year.png - Calendar photo of leap year day
-     * leaper.png - A emoji of someone leaping
-  * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Output):
-      * Badplot.pdf - PDF of Bad plot
-      * Goodplot.pdf - PDF of Good plot
-      * bad_plot-1.png - png of Bad plot
-      * good_plot-1.png - png of Good plot
-  * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Script):
-     * Badplot_goodplot_files/libs - Folder of Badplot_goodplot
-     * Badplot_goodplot.html - HTML of Badplot_goodplot
-     * Badplot_goodplot.qmd - qmd of Badplot_goodplot
 * [**Tidy_Tuesday**](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday): Good plot Bad plot Assignment
   * [Week_11](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_11):
      * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_11/Output):
@@ -48,6 +35,25 @@
      * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_14/Script):
         * Week_14_TidyTuesday.html - HTML of Tidy_Tuesday Week 14
         * Week_14_TidyTuesday.qmd - qmd of Tidy_Tuesday Week 14
+   * [Week_15](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_15):
+     * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_15/Output):
+        * Week_15_TT.html - HTML output
+     * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Tidy_Tuesday/Week_15/Script):
+        * styles.scss - scss file for quarto theme
+        * Week_15_TT.qmd - qmd of Tidy_Tuesday Week 15
+* [**Good_plot_Bad_plot**](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot): Good plot Bad plot Assignment
+  * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Data):
+     * calendar_photo_leap_year.png - Calendar photo of leap year day
+     * leaper.png - A emoji of someone leaping
+  * [Output](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Output):
+      * Badplot.pdf - PDF of Bad plot
+      * Goodplot.pdf - PDF of Good plot
+      * bad_plot-1.png - png of Bad plot
+      * good_plot-1.png - png of Good plot
+  * [Script](https://github.com/OCN-682-UH/Barkai/tree/main/Good_plot_Bad_plot/Script):
+     * Badplot_goodplot_files/libs - Folder of Badplot_goodplot
+     * Badplot_goodplot.html - HTML of Badplot_goodplot
+     * Badplot_goodplot.qmd - qmd of Badplot_goodplot
 * [**Week_02**](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02): Reproducible scripts and workflow/importing data
   * [Data](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Data): weightdata.csv - this has data on treatments and weight for each sample
   * [Scripts](https://github.com/OCN-682-UH/Barkai/tree/main/Week_02/Scripts): Week02_script - this is the first script that has loading libraries, read in data and data analysis
